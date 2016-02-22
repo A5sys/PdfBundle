@@ -13,6 +13,6 @@
         "mikehaertl/phpwkhtmltopdf": "~2.0"
     },
     "autoload": {
-        "psr-4": { "A5sys\\PdfBundle": "" }
+        "psr-4": { "A5sys\\PdfBundle\\": "" }
     }
 }
