@@ -2,12 +2,12 @@
 
 namespace A5sys\PdfBundle\Service;
 
-use A5sys\ProjectBundle\Exception\ServiceException;
+use A5sys\PdfBundle\Exception\PdfException;
 use mikehaertl\wkhtmlto\Pdf;
 
 /**
- * PdfService. Wkhtmltopdf doit Ãªtre installÃ© sur le systÃ¨me
- * Utilitaires pour gÃ©nÃ©rer des documents PDF.
+ * PdfService. Wkhtmltopdf doit être installé sur le système
+ * Utilitaires pour générer des documents PDF.
  */
 class PdfService
 {
@@ -49,15 +49,15 @@ class PdfService
     /**
      * Returns complete options for PDF generation, with default values from conf eventually overriden by thos of the 3 given arrays.
      *
-     * @param $options all options, can contain commandOptions
-     * @param $commandOptions all command options, can contain procOptions
-     * @param $procOptions all process options (system)
+     * @param array $options        all options, can contain commandOptions
+     * @param array $commandOptions all command options, can contain procOptions
+     * @param array $procOptions    all process options (system)
      *
      * @return array
      */
     public function getOptions($options = null, $commandOptions = null, $procOptions = null)
     {
-        // valeurs par dÃ©faut
+        // valeurs par défaut
         $mergedOptions = array(
             'binary' => $this->binary,
             'tmpDir' => $this->tempDir,
@@ -127,7 +127,31 @@ class PdfService
         $pdf->addPage($html);
 
         if (!$pdf->saveAs($filePath)) {
-            throw new ServiceException('Could not create PDF: '.$pdf->getError());
+            throw new PdfException('Could not create PDF: '.$pdf->getError());
+        }
+    }
+
+    /**
+     * Send the generated PDF onto the Response
+     *
+     * @param type $html           HTML to render in PDF
+     * @param type $fileName
+     * @param type $options        Can contain informations for header et footer (header-html, footer-html, footer-left ... use "wkhtmltopdf.exe -H" for more help)
+     * @param type $commandOptions
+     * @param type $procOptions
+     *
+     * @return type
+     */
+    public function sendPDF($html, $fileName, $options = null, $commandOptions = null, $procOptions = null)
+    {
+        $options = $this->getOptions($options, $commandOptions, $procOptions);
+
+        $pdf = new Pdf($options);
+
+        $pdf->addPage($html);
+
+        if (!$pdf->send($fileName)) {
+            throw new PdfException('Could not create PDF: '.$pdf->getError());
         }
     }
 }
