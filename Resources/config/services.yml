@@ -4,7 +4,7 @@ services:
     a5sys_pdf.pdf_service:
         class: A5sys\PdfBundle\Service\PdfService
         arguments:
-            - %a5sys_pdf.binary%
-            - %a5sys_pdf.temp_dir%
-            - %a5sys_pdf.command_options%
-            - %a5sys_pdf.encoding%
+            - "%a5sys_pdf.binary%"
+            - "%a5sys_pdf.temp_dir%"
+            - "%a5sys_pdf.command_options%"
+            - "%a5sys_pdf.encoding%"
